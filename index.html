@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meaning Beyond Brands</title>
+  <meta name="description" content="Loyalty isn’t bought anymore. It’s felt. We connect the people companies value with the people brands want to reach." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Cormorant Garamond weights extended to 500 (+ matching italics) for the
+       hero: the correction brief asks for 400/500 weights that the original
+       300/400/600 list did not contain. Same CDN, same families. -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<!-- theme-landing carries Landing's texture settings now that style.css drives
+     the paper grain from theme variables shared with corporate/brands. -->
+<body class="theme-landing">
+
+  <main class="page">
+
+    <header class="hero">
+      <!-- TODO: swap placeholder art once final transparent-background assets land.
+           mbb-star-logo.png still has a white studio background; it is cropped to the
+           star and composited with mix-blend-mode: multiply. See .hero__star in style.css. -->
+      <span class="hero__star" aria-hidden="true">
+        <img src="Assets/Brand/mbb-star-logo-web.png" alt="" />
+      </span>
+
+      <p class="hero__wordmark">Meaning Beyond Brands</p>
+
+      <h1 class="hero__headline">
+        Loyalty isn’t bought anymore. <em>It’s felt.</em>
+      </h1>
+
+      <p class="hero__lede">
+        We connect the people companies value with the people brands want to reach.
+      </p>
+
+      <span class="hero__rule" aria-hidden="true"></span>
+    </header>
+
+    <nav class="gateway" aria-label="Choose your side">
+
+      <a class="invitation invitation--corporate" href="corporate.html">
+        <span class="invitation__stage">
+
+          <span class="invitation__card">
+            <span class="invitation__copy">
+              <svg class="invitation__ornament" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <polygon points="12,1 12.69,10.34 16.38,7.62 13.66,11.31 23,12 13.66,12.69 16.38,16.38 12.69,13.66 12,23 11.31,13.66 7.62,16.38 10.34,12.69 1,12 10.34,11.31 7.62,7.62 11.31,10.34" />
+              </svg>
+              <span class="invitation__title">Corporate</span>
+              <span class="invitation__reveal">Discover rewards designed to be remembered.</span>
+            </span>
+          </span>
+
+          <span class="invitation__envelope" aria-hidden="true">
+            <span class="invitation__envelope-art">
+              <img src="Assets/envelope-pair-corporate-brands.jpg" alt="" />
+            </span>
+          </span>
+
+          <!-- The wax seal straddles the envelope's opening, so it is drawn as
+               its own top layer rather than being sliced by the envelope's
+               silhouette. Position measured from the source art — see --seal-*
+               in style.css. -->
+          <span class="invitation__seal" aria-hidden="true">
+            <img src="Assets/envelope-pair-corporate-brands.jpg" alt="" />
+          </span>
+
+        </span>
+      </a>
+
+      <a class="invitation invitation--brands" href="brands.html">
+        <span class="invitation__stage">
+
+          <span class="invitation__card">
+            <span class="invitation__copy">
+              <svg class="invitation__ornament" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <polygon points="12,1 12.69,10.34 16.38,7.62 13.66,11.31 23,12 13.66,12.69 16.38,16.38 12.69,13.66 12,23 11.31,13.66 7.62,16.38 10.34,12.69 1,12 10.34,11.31 7.62,7.62 11.31,10.34" />
+              </svg>
+              <span class="invitation__title">Brands</span>
+              <span class="invitation__reveal">Discover a more meaningful way to reach the right people.</span>
+            </span>
+          </span>
+
+          <span class="invitation__envelope" aria-hidden="true">
+            <span class="invitation__envelope-art">
+              <img src="Assets/envelope-pair-corporate-brands.jpg" alt="" />
+            </span>
+          </span>
+
+          <!-- The wax seal straddles the envelope's opening, so it is drawn as
+               its own top layer rather than being sliced by the envelope's
+               silhouette. Position measured from the source art — see --seal-*
+               in style.css. -->
+          <span class="invitation__seal" aria-hidden="true">
+            <img src="Assets/envelope-pair-corporate-brands.jpg" alt="" />
+          </span>
+
+        </span>
+      </a>
+
+    </nav>
+
+  </main>
+
+  <footer class="footer">
+    <!-- "Ras Al Khaimah" corrected from "Dubai" per MBB-V2-SHARED-ARCHITECTURE
+         section 8, which resolves this for Landing as well as the theme pages.
+         Legal links omitted until Privacy/Terms pages actually exist, per the
+         2026-08-07 decision in COPY-NEEDED.md: no "#" placeholders. -->
+    <p>
+      Meaning Beyond Brands FZ-LLC
+      <span aria-hidden="true">·</span> Ras Al Khaimah, UAE
+      <span aria-hidden="true">·</span> <a href="mailto:hello@meaningbeyondbrands.com">Contact</a>
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

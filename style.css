@@ -1,0 +1,1543 @@
+/* ==========================================================================
+   Meaning Beyond Brands — shared stylesheet
+   Serves three pages: index.html (Landing / invitation gateway),
+   corporate.html and brands.html (the seven-section theme pages).
+   Self-contained: every asset referenced here lives inside ./Assets/
+
+   Layout of this file:
+     1. Palette + Landing (unchanged from the original build)
+     2. Theme system — .theme-landing / .theme-corporate / .theme-brands
+     3. Shared components for the theme pages
+     4. Motion + reduced-motion fallbacks
+   ========================================================================== */
+
+:root {
+  /* Approved palette */
+  --dark-olive: #33413A;
+  --body-green: #63705F;
+  --muted-gold: #B8934A;
+  --dark-gold:  #9C7A3C;
+  --bg-sage:    #E2EAE2;
+  --card-sage:  #D3DED0;
+  --ivory:      #F4F7F2;
+
+  /* Lighting. One source, soft, upper-left: every cast shadow on the page
+     offsets to the lower-right. The only exception is the contact shadow the
+     envelope mouth casts back onto the card, which is occlusion, not light. */
+  --shadow-tint: 51, 65, 58;
+
+  /* Motion — slow, "expensive", never springy */
+  --ease-invitation: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-rise: 900ms;
+  --dur-fade: 620ms;
+
+  /* Master scale for the invitation objects. Both invitations are driven from
+     this single value, so they can never drift apart in size. */
+  --env-w: min(26vw, 33vh, 320px);
+}
+
+/* --------------------------------------------------------------------------
+   Reset / page
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background-color: var(--bg-sage);
+}
+
+/* The theme pages own their page colour. :has() only paints the overscroll
+   gutter behind <body>; where it is unsupported the body background below
+   still covers everything that is actually on screen. */
+html:has(.theme-corporate) { background-color: #33413A; }
+html:has(.theme-brands)    { background-color: #F4F7F2; }
+
+body {
+  margin: 0;
+  color: var(--body-green);
+  font-family: "Jost", system-ui, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The page reads as a quiet field first and a texture second. The paper grain
+   sits on its own layer at low opacity so it recedes behind the type instead
+   of competing with it. All three pages share this one rule; only the opacity
+   and blend mode change per theme, which is what lets the same sage texture
+   sit correctly on ivory and on dark olive.
+   TODO: swap placeholder art once final transparent-background assets land —
+   the finer cotton-paper texture replaces the url() below and the opacity can
+   then be raised, because a quieter grain no longer needs to be held back. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: url("Assets/bg-paper-texture-sage.jpg");
+  background-size: cover;
+  background-position: center;
+  opacity: var(--texture-opacity, 0.22);
+  mix-blend-mode: var(--texture-blend, normal);
+  pointer-events: none;
+}
+
+img { display: block; }
+
+a { color: inherit; }
+
+/* --------------------------------------------------------------------------
+   Page shell — hero + gateway share the first viewport on desktop
+   -------------------------------------------------------------------------- */
+
+.page {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.75rem, 4.5vh, 3.5rem);
+  padding: clamp(2rem, 5vh, 4rem) clamp(1.25rem, 5vw, 4rem);
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 54rem;
+}
+
+/* The star mark is cropped out of the 1254 × 1254 source (star occupies
+   x 217–1028, y 103–1105) and multiplied over the page so the white studio
+   background disappears against the sage. */
+.hero__star {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: clamp(38px, 5.4vh, 60px);
+  aspect-ratio: 811 / 1002;
+  mix-blend-mode: multiply;
+}
+
+/* TODO: swap placeholder art once final transparent-background assets land.
+   With a true cut-out star this whole block collapses to:
+   .hero__star img { position: static; width: 100%; height: 100%; }
+   and mix-blend-mode above can be removed. */
+.hero__star img {
+  position: absolute;
+  width: 154.62%;
+  height: 125.15%;
+  left: -26.76%;
+  top: -10.28%;
+  max-width: none;
+}
+
+.hero__wordmark {
+  margin: clamp(1rem, 2.4vh, 1.6rem) 0 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  font-size: min(clamp(0.82rem, 1.1vw, 1.02rem), 2.2vh);
+  letter-spacing: 0.44em;
+  text-indent: 0.44em; /* cancels the trailing letter-space so the caps optically centre */
+  text-transform: uppercase;
+  color: var(--dark-olive);
+}
+
+/* The strongest text moment on the page. Weight 500 rather than 300 so the
+   high-contrast stems hold up over the paper field; the hairline text-shadow
+   is there to seat it on the stock, not to glow. */
+.hero__headline {
+  margin: clamp(1.4rem, 3.4vh, 2.4rem) 0 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  /* The vh ceiling keeps the headline from growing the hero past the point
+     where the invitations fall out of the first viewport on short screens. */
+  font-size: min(clamp(2.15rem, 4.9vw, 3.95rem), 8.4vh);
+  line-height: 1.14;
+  letter-spacing: 0.004em;
+  text-wrap: balance;
+  color: var(--dark-olive);
+  text-shadow: 0 1px 1px rgba(51, 65, 58, 0.10);
+}
+
+.hero__headline em {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.hero__lede {
+  margin: clamp(1rem, 2.4vh, 1.5rem) 0 0;
+  max-width: 34em;
+  font-size: min(clamp(0.92rem, 1.2vw, 1.08rem), 2.6vh);
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0.035em;
+  text-wrap: balance;
+  color: var(--dark-olive);
+}
+
+/* Gold used only as a hairline detail */
+.hero__rule {
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin-top: clamp(1.4rem, 3.2vh, 2.4rem);
+  background-color: var(--muted-gold);
+  opacity: 0.5;
+}
+
+/* --------------------------------------------------------------------------
+   Invitation gateway
+   -------------------------------------------------------------------------- */
+
+.gateway {
+  display: flex;
+  align-items: flex-end;      /* envelope bottoms share one baseline */
+  justify-content: center;
+  gap: clamp(2.5rem, 7vw, 7rem);
+}
+
+.invitation {
+  /* ---- Geometry. Everything derives from --env-w so the two objects are
+          guaranteed identical in scale. ---------------------------------- */
+  --env-ratio: 0.7385;                                   /* envelope h ÷ w   */
+  --env-h: calc(var(--env-w) * var(--env-ratio));
+  --card-w: calc(var(--env-w) * 0.80);
+  --card-h: calc(var(--env-w) * 0.72);                   /* the visible card */
+
+  /* The card element is drawn taller than the card it represents. The surplus
+     stays permanently inside the envelope, which is what keeps the card's
+     bottom edge from appearing in the notch of the envelope front when it
+     rises. Nothing below --card-h is ever on screen. */
+  --card-tuck: calc(var(--env-w) * 0.22);
+  --card-box-h: calc(var(--card-h) + var(--card-tuck));
+
+  /* How much card shows above the envelope at rest, and how much further it
+     rises on hover/focus (brief: 20–25% of the card's own height). */
+  --card-rest: calc(var(--card-h) * 0.36);
+  --card-lift: calc(var(--card-h) * 0.22);
+
+  --card-bottom: calc(var(--env-h) + var(--card-rest) - var(--card-box-h));
+  --stage-h: calc(var(--env-h) + var(--card-rest) + var(--card-lift));
+
+  display: block;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.invitation__stage {
+  position: relative;
+  display: block;
+  width: var(--env-w);
+  height: var(--stage-h);
+}
+
+/* ---- Card layer (behind the envelope, the only thing that moves) -------- */
+
+.invitation__card {
+  position: absolute;
+  left: 50%;
+  bottom: var(--card-bottom);
+  z-index: 1;
+  width: var(--card-w);
+  height: var(--card-box-h);
+  margin-left: calc(var(--card-w) / -2);
+  border-radius: 2px;
+  background-color: var(--ivory);
+  box-shadow:
+    1px 1px 0 rgba(var(--shadow-tint), 0.09),
+    4px 11px 22px -12px rgba(var(--shadow-tint), 0.32);
+  font-size: max(11px, calc(var(--card-w) * 0.052));
+  transform: translateY(0);
+  transition:
+    transform var(--dur-rise) var(--ease-invitation),
+    box-shadow var(--dur-rise) var(--ease-invitation);
+  will-change: transform;
+}
+
+/* TODO: swap placeholder art once final transparent-background assets land.
+   The production card is blank artwork (paper texture + edge + optional fine
+   gold rule). Until it exists the substrate is composed here in CSS so that the
+   title and reveal copy can already be real HTML text. When the blank card PNG
+   arrives, this becomes:
+     .invitation__card { background-image: url("Assets/card-blank.png");
+                         background-size: 100% 100%; }
+   and the ::before / ::after rules below can be deleted.
+   Note: Assets/card-corporate-closed.png and Assets/card-brands-closed.png are
+   NOT used — their baked-in "Corporate"/"Brands" type would sit underneath the
+   real HTML text. See the handover note. */
+.invitation__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("Assets/bg-paper-texture-sage.jpg");
+  background-size: 190% auto;
+  background-position: center;
+  mix-blend-mode: multiply;
+  opacity: 0.12;
+}
+
+/* Fine gold rule, inset — the one piece of gold on the card.
+   Framed against --card-h (the visible card), not the tucked-in box. */
+.invitation__card::after {
+  content: "";
+  position: absolute;
+  top: calc(var(--card-h) * 0.055);
+  bottom: 0;
+  left: 4.5%;
+  right: 4.5%;
+  border: 1px solid rgba(184, 147, 74, 0.42);
+  border-bottom: 0; /* the rule runs on down behind the envelope, never closes */
+}
+
+.invitation__copy {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding: 1.1em 1.4em 0;
+  text-align: center;
+}
+
+.invitation__ornament {
+  display: block;
+  width: 1.05em;
+  height: 1.05em;
+  margin: 0 auto 0.45em;
+  fill: var(--muted-gold);
+}
+
+.invitation__title {
+  display: block;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  font-size: 1.45em;
+  line-height: 1.1;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em; /* cancels the trailing letter-space so the caps optically centre */
+  text-transform: uppercase;
+  color: var(--dark-olive);
+}
+
+.invitation__reveal {
+  display: block;
+  margin-top: 0.85em;
+  font-family: "Jost", system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 0.92em;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  text-wrap: balance;
+  color: var(--body-green);
+  opacity: 0;
+  transition: opacity var(--dur-fade) var(--ease-invitation);
+}
+
+/* ---- Envelope layer (foreground, never moves) --------------------------- */
+
+.invitation__envelope {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 100%;
+  height: var(--env-h);
+  /* drop-shadow lives on the unclipped wrapper so the silhouette casts it.
+     First: the soft bed that sits the whole object on the page, offset to the
+     lower-right. Second: the tight contact shadow the envelope mouth throws
+     back onto the card behind it, which is what stops the card reading as a
+     rectangle pasted on top. */
+  filter:
+    drop-shadow(7px 16px 28px rgba(var(--shadow-tint), 0.15))
+    drop-shadow(0 -2px 4px rgba(var(--shadow-tint), 0.16));
+}
+
+.invitation__envelope-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: var(--env-clip);
+}
+
+.invitation__envelope img {
+  position: absolute;
+  width: var(--env-img-w);
+  height: var(--env-img-h);
+  left: var(--env-img-x);
+  top: var(--env-img-y);
+  max-width: none;
+}
+
+/* TODO: swap placeholder art once final transparent-background assets land.
+   Both envelope fronts are currently cropped out of the reference pair shot and
+   clipped to the front-panel silhouette, which is why the crop/clip variables
+   exist. With the real standalone transparent PNGs, point the two <img src="">
+   attributes in index.html at the new files and each block below reduces to:
+     --env-img-w: 100%; --env-img-h: 100%; --env-img-x: 0; --env-img-y: 0;
+     --env-clip: none;
+   plus --env-ratio above set to the new artwork's height ÷ width.
+   Nothing else changes. */
+.invitation--corporate {
+  /* crop box in source px: x 107–757, y 400–880 of a 1536 × 1024 image */
+  --env-img-w: 236.31%;
+  --env-img-h: 213.33%;
+  --env-img-x: -16.46%;
+  --env-img-y: -83.33%;
+  --env-clip: polygon(0 0, 50% 56.25%, 100% 0, 100% 100%, 0 100%);
+  /* seal measured at centre (433, 680), Ø 158px in the source */
+  --seal-cx: 0.5015;
+  --seal-cy: 0.5833;
+  --seal-d: calc(var(--env-w) * 0.2431);
+  --seal-img-x: -224.05%;
+}
+
+.invitation--brands {
+  /* crop box in source px: x 779–1429, y 400–880 — identical box size, so the
+     two envelopes render at exactly the same geometry */
+  --env-img-w: 236.31%;
+  --env-img-h: 213.33%;
+  --env-img-x: -119.85%;
+  --env-img-y: -83.33%;
+  --env-clip: polygon(0 0, 50% 56.25%, 100% 0, 100% 100%, 0 100%);
+  /* seal measured at centre (1091.5, 680), Ø 158px in the source */
+  --seal-cx: 0.4808;
+  --seal-cy: 0.5833;
+  --seal-d: calc(var(--env-w) * 0.2431);
+  --seal-img-x: -640.82%;
+  /* The light envelope reads lighter than the dark one at identical pixel
+     size, so it carries a fractionally deeper shadow to even out the weight. */
+}
+
+.invitation--brands .invitation__envelope {
+  filter:
+    drop-shadow(7px 16px 30px rgba(var(--shadow-tint), 0.24))
+    drop-shadow(0 -2px 4px rgba(var(--shadow-tint), 0.16));
+}
+
+/* ---- Wax seal -----------------------------------------------------------
+   In the artwork the seal sits across the envelope's opening, so the front
+   panel's silhouette cuts straight through it. It is therefore lifted out as
+   its own layer above the envelope: a circular window onto the same source
+   image, positioned and sized from the seal's measured bounding box, carrying
+   the soft contact shadow that seats it on the paper.
+   TODO: swap placeholder art once final transparent-background assets land —
+   if the new envelope PNG contains a properly resolved, uncropped seal, delete
+   this element and its markup entirely. */
+.invitation__seal {
+  position: absolute;
+  z-index: 3;
+  width: var(--seal-d);
+  height: var(--seal-d);
+  left: calc(var(--env-w) * var(--seal-cx) - var(--seal-d) / 2);
+  top: calc(
+    var(--stage-h) - var(--env-h)
+    + var(--env-h) * var(--seal-cy)
+    - var(--seal-d) / 2
+  );
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 3px 6px 12px rgba(var(--shadow-tint), 0.26);
+  pointer-events: none;
+}
+
+.invitation__seal img {
+  position: absolute;
+  width: 972.15%;
+  height: 648.10%;
+  left: var(--seal-img-x);
+  top: -380.38%;
+  max-width: none;
+}
+
+/* --------------------------------------------------------------------------
+   Interaction states — hover, focus, press all share one raised treatment
+   -------------------------------------------------------------------------- */
+
+@media (hover: hover) {
+  .invitation:hover .invitation__card {
+    transform: translateY(calc(var(--card-lift) * -1));
+    box-shadow:
+      1px 1px 0 rgba(var(--shadow-tint), 0.11),
+      7px 21px 32px -16px rgba(var(--shadow-tint), 0.40);
+  }
+
+  .invitation:hover .invitation__reveal { opacity: 1; }
+}
+
+.invitation:focus-visible .invitation__card,
+.invitation:active .invitation__card {
+  transform: translateY(calc(var(--card-lift) * -1));
+  box-shadow:
+    1px 1px 0 rgba(var(--shadow-tint), 0.11),
+    7px 21px 32px -16px rgba(var(--shadow-tint), 0.40);
+}
+
+.invitation:focus-visible .invitation__reveal,
+.invitation:active .invitation__reveal { opacity: 1; }
+
+/* Visible focus ring, deliberately distinct from hover */
+.invitation:focus { outline: none; }
+
+.invitation:focus-visible .invitation__stage {
+  outline: 1px solid var(--dark-gold);
+  outline-offset: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — no rise, no tilt. The card simply rests in its raised
+   position so the reveal copy is legible without any animation.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .invitation {
+    --card-rest: calc(var(--card-h) * 0.58);
+    --card-lift: 0px;
+  }
+
+  .invitation__card,
+  .invitation__reveal { transition: none; }
+
+  .invitation__reveal { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   Footer — quiet, below the fold
+   -------------------------------------------------------------------------- */
+
+.footer {
+  padding: clamp(2rem, 6vh, 3.5rem) 1.5rem clamp(2rem, 5vh, 3rem);
+  text-align: center;
+}
+
+/* Quiet by size and tracking, not by washing the colour out — at 0.75 opacity
+   over the paper field this fell to 2.73:1, well under AA for text this small. */
+.footer p {
+  margin: 0;
+  font-size: 0.74rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dark-olive);
+}
+
+.footer a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(51, 65, 58, 0.35);
+  padding-bottom: 1px;
+  transition: border-color 240ms ease;
+}
+
+.footer a:hover,
+.footer a:focus-visible { border-bottom-color: var(--dark-gold); }
+
+/* --------------------------------------------------------------------------
+   Narrow screens — the two invitations stack; the page is allowed to scroll
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  :root { --env-w: min(68vw, 300px); }
+
+  .page {
+    justify-content: flex-start;
+    padding-top: clamp(2.5rem, 8vh, 4rem);
+  }
+
+  .gateway {
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(2rem, 6vh, 3rem);
+  }
+}
+
+/* ==========================================================================
+   2. THEME SYSTEM
+   Every shared component below reads only these variables, never a raw hex,
+   so Corporate and Brands are the same components with the palette inverted.
+   ========================================================================== */
+
+.theme-landing {
+  --texture-opacity: 0.22;
+  --texture-blend: normal;
+}
+
+.theme-corporate {
+  --surface:        #33413A;          /* primary page background — dark olive */
+  --surface-alt:    #2B372F;          /* deeper olive — secondary sections    */
+  --surface-card:   #F4F7F2;          /* ivory cards                          */
+  --card-ink:       #33413A;
+  --card-ink-soft:  #63705F;
+  --ink:            #F4F7F2;          /* main text — ivory                    */
+  --ink-soft:       #C3D0C0;
+  --rule:           rgba(244, 247, 242, 0.20);
+  /* Two golds, because one cannot do both jobs. --accent is the decorative
+     hairline/outline gold; --accent-text is the one small label copy is set
+     in, tuned to clear 4.5:1 on both this theme's surfaces. */
+  --accent:         #C2A05C;
+  --accent-text:    #C4A462;
+  /* ---- Hero photography ------------------------------------------------
+     TODO: swap for a different or higher-resolution set if one arrives. These
+     four lines are the whole swap: nothing in the markup names an image.
+     This is real, approved photography with the blank text panel composed into
+     the art, so the full file is used as the hero background rather than being
+     cropped. --hero-panel is sampled from that blank area so the solid text
+     panel matches the plate exactly.
+     The .jpg files are optimised exports of the supplied
+     Assets/Hero/hero-corporate-candidate-*.png masters, identical dimensions,
+     roughly 94% smaller. The PNG masters are kept untouched as the source. */
+  --hero-photo:          url("Assets/Hero/hero-corporate-split.jpg");
+  --hero-photo-portrait: url("Assets/Hero/hero-corporate-portrait.jpg");
+  --hero-panel:          #19180B;
+
+  /* The other side of the exchange, for the header switch link hover state */
+  --inverse-surface: #F4F7F2;
+  --inverse-ink:     #33413A;
+
+  --glint-rgb: 244, 247, 242;
+  --texture-opacity: 0.10;
+  --texture-blend: overlay;
+}
+
+.theme-brands {
+  --surface:        #F4F7F2;          /* primary page background — ivory      */
+  --surface-alt:    #D3DED0;          /* sage — secondary sections            */
+  --surface-card:   #33413A;          /* olive cards                          */
+  --card-ink:       #F4F7F2;
+  --card-ink-soft:  #C3D0C0;
+  --ink:            #33413A;
+  /* Darker than the base #63705F: on the sage secondary surface that value
+     measured 3.77:1, under AA for body copy. */
+  --ink-soft:       #586354;
+  --rule:           rgba(51, 65, 58, 0.18);
+  /* #9C7A3C reads as gold but only reaches 2.87:1 on sage, so it stays on
+     hairlines and outlines while label copy uses the darker --accent-text. */
+  --accent:         #9C7A3C;
+  --accent-text:    #765C2D;
+  /* TODO: swap for a different or higher-resolution set if one arrives.
+     Same technique as Corporate above; exports of
+     Assets/Hero/hero-brands-candidate-split.png and -v2.png. */
+  --hero-photo:          url("Assets/Hero/hero-brands-split.jpg");
+  --hero-photo-portrait: url("Assets/Hero/hero-brands-portrait.jpg");
+  --hero-panel:          #F3EDE6;
+
+  --inverse-surface: #33413A;
+  --inverse-ink:     #F4F7F2;
+
+  --glint-rgb: 51, 65, 58;
+  --texture-opacity: 0.18;
+  --texture-blend: multiply;
+}
+
+.theme-corporate,
+.theme-brands {
+  background-color: var(--surface);
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   3. SHARED COMPONENTS (Corporate + Brands)
+   ========================================================================== */
+
+/* Both resets are wrapped in :where() so they carry zero specificity and any
+   component class beats them. Written as plain `.theme-corporate h3` these are
+   class+type selectors, which outrank a single class: that silently zeroed
+   `.section__lede`'s top margin and, before that, painted the card titles
+   ivory on an ivory card. Headings also take `inherit` rather than --ink, so a
+   heading picks up the colour of whatever surface it sits on. */
+:where(.theme-corporate, .theme-brands) :is(h1, h2, h3) {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 400;
+  margin: 0;
+  color: inherit;
+}
+
+:where(.theme-corporate, .theme-brands) p { margin: 0; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--inverse-surface);
+  color: var(--inverse-ink);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+}
+
+.skip-link:focus { left: 0; }
+
+/* ---- Persistent header -------------------------------------------------- */
+
+.site-header {
+  /* Fixed rather than sticky so the hero can start at the top of the page
+     without anything having to know the header's height — that height depends
+     on the switch link's line box, which is taller than the star mark and does
+     not survive being hand-calculated. */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(0.9rem, 2vh, 1.4rem) clamp(1.25rem, 4vw, 3.5rem);
+  /* Transparent over the cinematic hero, then it takes on the page colour as
+     soon as content scrolls under it — see .is-stuck, set from script.js. */
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background-color 320ms ease, border-color 320ms ease;
+}
+
+.site-header.is-stuck {
+  background-color: var(--surface);
+  border-bottom-color: var(--rule);
+}
+
+.site-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.site-header__brand:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
+/* Same crop and blend trick as Landing — the source star still carries its
+   white studio background.
+   TODO: swap placeholder art once final transparent-background assets land. */
+.site-header__star {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: 26px;
+  aspect-ratio: 811 / 1002;
+  flex: none;
+}
+
+.site-header__star img,
+.page-hero__star img {
+  position: absolute;
+  width: 154.62%;
+  height: 125.15%;
+  left: -26.76%;
+  top: -10.28%;
+  max-width: none;
+}
+
+/* On dark olive a multiplied white box would stay white, so the star is
+   screened instead; on ivory it multiplies exactly as it does on Landing. */
+.theme-corporate .site-header__star,
+.theme-corporate .page-hero__star { mix-blend-mode: screen; }
+.theme-brands    .site-header__star,
+.theme-brands    .page-hero__star { mix-blend-mode: multiply; }
+
+.site-header__wordmark {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* The switch link previews the other theme literally: on hover and on keyboard
+   focus it repaints itself in the inverse palette. */
+/* Plain text and an arrow at rest, matching the hero mockups. The bordered
+   chip only appears on hover/focus, where it doubles as the inverse-palette
+   preview the architecture asks for. */
+.site-header__switch {
+  display: inline-block;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid transparent;
+  color: var(--ink);
+  font-size: clamp(0.72rem, 0.9vw, 0.84rem);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 260ms ease, color 260ms ease, border-color 260ms ease;
+}
+
+/* Height comes from the 26:8 viewBox. Fixing both dimensions made the drawn
+   path wider than its own box, which then painted outside the header. */
+.site-header__arrow {
+  display: inline-block;
+  width: 1.9em;
+  height: auto;
+  margin-left: 0.7em;
+  vertical-align: middle;
+}
+
+.site-header__switch:hover,
+.site-header__switch:focus-visible {
+  background-color: var(--inverse-surface);
+  border-color: var(--inverse-surface);
+  color: var(--inverse-ink);
+}
+
+.site-header__switch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---- Section shell ------------------------------------------------------
+   Only the hero is full-height. Everything else sizes to its own content —
+   the single biggest correction against the reference drafts. */
+
+.section {
+  padding: clamp(3.5rem, 9vh, 7rem) clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.section--alt { background-color: var(--surface-alt); }
+
+.section__inner {
+  max-width: 68rem;
+  margin: 0 auto;
+}
+
+.section__eyebrow {
+  display: block;
+  margin-bottom: 1.1rem;
+  color: var(--accent-text);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  text-transform: uppercase;
+}
+
+.section__title {
+  font-size: clamp(1.7rem, 3.4vw, 2.9rem);
+  line-height: 1.18;
+  max-width: 22ch;
+  text-wrap: balance;
+}
+
+.section__lede {
+  margin-top: clamp(1.4rem, 3vh, 2.1rem);
+  max-width: 56ch;
+  color: var(--ink-soft);
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+/* The Shift and About both run to multiple paragraphs. */
+.section__lede + .section__lede { margin-top: 1.1em; }
+
+/* ---- 01 Hero ------------------------------------------------------------ */
+
+/* The photograph is the background of the whole hero, not just the right half.
+   The art has its own blank panel built into its left side, so scaling the
+   full 1672px file across the full hero width puts far more pixels through the
+   visible photo area than cropping out the right half ever could. The solid
+   text panel then sits on top of the blank part. */
+.page-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 43% 1fr;
+  /* minmax(0, 1fr) rather than 1fr: otherwise the photo's intrinsic aspect
+     ratio sets a min-content height on the row and pushes the strapline off
+     the first viewport. */
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+.page-hero__panel {
+  grid-column: 1;
+  grid-row: 1;
+  z-index: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: clamp(6rem, 14vh, 9rem) clamp(1.75rem, 3.5vw, 3rem)
+           clamp(2rem, 6vh, 3.5rem) clamp(1.25rem, 4vw, 3.5rem);
+}
+
+/* The panel colour is --hero-panel, sampled from the artwork, NOT --surface.
+   The blank area built into the photography is a warmer, darker olive than the
+   page surface on Corporate and a warmer ivory on Brands, so painting the
+   panel in --surface would put a hard vertical seam down the hero. The right
+   edge is masked so whatever residual mismatch remains dissolves rather than
+   drawing a line. Masking a pseudo-element rather than .page-hero__panel keeps
+   the text itself fully opaque. */
+.page-hero__panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--hero-panel);
+  -webkit-mask-image: linear-gradient(to right, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 72%, transparent 100%);
+}
+
+/* Spans both columns: the photograph is the background of the entire hero. */
+.page-hero__photo {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The photograph is painted here rather than by an <img> so that the file path
+   lives in exactly one place per theme (--hero-photo above). Absolutely
+   positioned so it contributes no intrinsic size to the grid row: the row
+   height is decided by the viewport, not by the photo.
+   The description is not lost by dropping <img>: .page-hero__photo carries
+   role="img" and an aria-label in the markup. */
+.page-hero__photo-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--hero-photo);
+  background-size: cover;
+  background-position: center;
+  transition: transform 1600ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.is-loaded .page-hero__photo-layer { transform: scale(1); }
+
+.page-hero__closing {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  z-index: 1;
+  padding: clamp(1rem, 2.4vh, 1.5rem) clamp(1.25rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--rule);
+  /* --hero-panel, not --surface: the strapline is the foot of the hero plate,
+     so it carries the plate's colour and the change to the page surface
+     happens at the section boundary below instead of mid-hero. */
+  background-color: var(--hero-panel);
+  color: var(--ink-soft);
+  font-size: clamp(0.74rem, 0.95vw, 0.86rem);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.page-hero__rule {
+  display: block;
+  width: 92px;
+  height: 1px;
+  margin: clamp(1.5rem, 3.5vh, 2.4rem) 0 clamp(1.4rem, 3vh, 2rem);
+  background-color: var(--accent);
+}
+
+/* One gold pass across the header star on entry. It runs once, no loop. The
+   mockups place the star in the header only, so it is not repeated here. */
+.site-header__star::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.is-loaded .site-header__star::after {
+  animation: mbb-star-pass 1500ms cubic-bezier(0.22, 1, 0.36, 1) 600ms 1 both;
+}
+
+@keyframes mbb-star-pass {
+  0%   { opacity: 0;    clip-path: inset(0 100% 0 0); }
+  45%  { opacity: 0.55; clip-path: inset(0 0 0 0); }
+  100% { opacity: 0;    clip-path: inset(0 0 0 100%); }
+}
+
+/* The headline reveals through a clipping mask, one line at a time. */
+/* Sits above .page-hero__panel::before, which carries the masked panel colour. */
+.page-hero__panel-inner {
+  position: relative;
+  width: 100%;
+}
+
+.page-hero__headline {
+  font-size: clamp(2rem, 3.7vw, 3.5rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+/* The mask is the point of the reveal, but a tight overflow box beheads every
+   descender — the g in "enough", the y in "anymore". The padding gives them
+   room and the negative margin gives the space straight back, so the line
+   rhythm is unchanged. */
+.page-hero__headline .line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.page-hero__headline .line > span {
+  display: block;
+  transition: transform 1100ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Pre-entry state, applied only once script.js has confirmed it is running. */
+.js-motion .page-hero__photo-layer { transform: scale(1.025); }
+.js-motion .page-hero__headline .line > span { transform: translateY(105%); }
+.js-motion .page-hero__support { opacity: 0; }
+
+.is-loaded .page-hero__headline .line > span { transform: translateY(0); }
+.is-loaded .page-hero__headline .line:nth-child(2) > span { transition-delay: 110ms; }
+.is-loaded .page-hero__headline .line:nth-child(3) > span { transition-delay: 220ms; }
+
+.page-hero__support {
+  max-width: 34ch;
+  color: var(--ink-soft);
+  font-size: clamp(0.92rem, 1.15vw, 1.05rem);
+  font-weight: 400;
+  line-height: 1.7;
+  transition: opacity 900ms ease 480ms;
+}
+
+.is-loaded .page-hero__support { opacity: 1; }
+
+/* ---- 03 How It Works ---------------------------------------------------- */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+  margin: clamp(2rem, 5vh, 3.5rem) 0 0;
+  padding: 0;
+  /* It stays an <ol> for semantics, but the visible numbering is the styled
+     counter below — without this the browser marker doubles it up. */
+  list-style: none;
+  counter-reset: step;
+}
+
+.step { counter-increment: step; }
+
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  display: block;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--accent-text);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+}
+
+.step__title {
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1.3;
+}
+
+.step__body {
+  margin-top: 0.6rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* ---- 05 Why MBB --------------------------------------------------------- */
+
+/* Five cards, so the column count is explicit rather than auto-fit: auto-fit
+   lands on four across at this container width and orphans the fifth. Three
+   across gives a 3 + 2 arrangement that reads as a considered set. */
+.reasons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(2rem, 5vh, 3.5rem);
+}
+
+@media (min-width: 620px) {
+  .reasons { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .reasons { grid-template-columns: repeat(3, 1fr); }
+}
+
+.reason {
+  padding: clamp(1.4rem, 2.5vw, 2rem);
+  background-color: var(--surface-card);
+  color: var(--card-ink);
+  border: 1px solid var(--rule);
+}
+
+/* colour inherits from .reason, which owns the card surface */
+.reason__title {
+  font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+  line-height: 1.3;
+}
+
+.reason__body {
+  margin-top: 0.65rem;
+  color: var(--card-ink-soft);
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+/* ---- 06 About ----------------------------------------------------------- */
+
+.founders {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-top: clamp(2.2rem, 5vh, 3.5rem);
+  /* Wide enough that the real bios do not wrap to seven short lines. */
+  max-width: 60rem;
+}
+
+.founder {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+}
+
+.founder__portrait {
+  flex: none;
+  width: clamp(56px, 7vw, 76px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--surface-alt);
+  border: 1px solid var(--rule);
+}
+
+/* Square 500x500 sources, so cover is a no-op crop; it is here so a
+   non-square replacement cannot distort. */
+.founder__portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.founder__name {
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  line-height: 1.3;
+}
+
+.founder__role {
+  margin-top: 0.35rem;
+  color: var(--accent-text);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.founder__bio {
+  margin-top: 0.55rem;
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* ---- 07 Closing --------------------------------------------------------- */
+
+.closing { text-align: center; }
+
+.closing .section__title {
+  max-width: 20ch;
+  margin: 0 auto;
+  font-size: clamp(1.9rem, 4.2vw, 3.4rem);
+}
+
+.closing__contact {
+  display: inline-block;
+  margin-top: clamp(1.6rem, 4vh, 2.6rem);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--accent);
+  color: var(--ink);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: color 240ms ease, border-color 240ms ease;
+}
+
+.closing__contact:hover { color: var(--accent-text); }
+
+.closing__contact:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
+/* ---- Footer ------------------------------------------------------------- */
+
+.site-footer {
+  padding: clamp(2.5rem, 6vh, 4rem) clamp(1.25rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--rule);
+}
+
+.site-footer__inner {
+  max-width: 68rem;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+  transition: border-color 240ms ease, color 240ms ease;
+}
+
+.site-footer a:hover { color: var(--ink); border-bottom-color: var(--accent); }
+
+.site-footer a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.site-footer__links { display: flex; gap: 1.5rem; }
+
+/* ---- 04 Experiences — the sticky gallery (WOW 2) -------------------------
+   Plain CSS + IntersectionObserver, per the architecture guardrail. The tall
+   .gallery__scroll gives the sticky stage something to travel through; three
+   absolutely-positioned cues sit inside it and report which state is current.
+
+   The whole pinned mechanic is opt-in: it only applies inside the desktop
+   media query below. The default (mobile, and any reduced-motion user) is the
+   plain stacked editorial sequence, which is also the documented fallback if
+   the sticky version ever proves unreliable — deleting the media query alone
+   leaves a complete, working section. */
+
+.gallery__scroll { position: relative; }
+
+.gallery__states {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 6vh, 4rem);
+  margin-top: clamp(2rem, 5vh, 3.5rem);
+}
+
+.gallery__state {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* The three proof photos are portrait (800x1066), so the frame keeps a
+   portrait ratio and the images crop only slightly. */
+.gallery__figure {
+  margin: 0;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background-color: var(--surface-alt);
+  border: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery__figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+.gallery__index {
+  display: block;
+  color: var(--accent-text);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+}
+
+.gallery__name {
+  margin-top: 0.8rem;
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  line-height: 1.2;
+}
+
+.gallery__caption {
+  margin-top: 0.9rem;
+  max-width: 42ch;
+  color: var(--ink-soft);
+  font-size: clamp(0.92rem, 1.1vw, 1rem);
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.gallery__cues { display: none; }
+
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .gallery__scroll { height: 300svh; }
+
+  .gallery__sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    align-items: center;
+  }
+
+  /* The states are absolutely positioned, so they contribute no intrinsic
+     width — without this the flex parent shrink-to-fits to nothing. */
+  .gallery__sticky > .section__inner {
+    width: 100%;
+    flex: 1;
+  }
+
+  .gallery__states {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin-top: 0;
+    /* tall enough to hold the largest state, since children are out of flow */
+    min-height: min(62svh, 34rem);
+  }
+
+  .gallery__state {
+    position: absolute;
+    inset: 0;
+    grid-template-columns: 58% 1fr;
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    opacity: 0;
+    transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(14px);
+    pointer-events: none;
+  }
+
+  .gallery__state.is-active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .gallery__figure {
+    height: min(62svh, 34rem);
+    aspect-ratio: auto;
+  }
+
+  .gallery__cues {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .gallery__cue { height: 33.3333%; }
+}
+
+/* ==========================================================================
+   4. AMBIENT CURSOR GLINT (Corporate/Brands, desktop, pointer: fine)
+   Hard rule enforced in script.js: never more than one glint alive at a time,
+   and the 8-point star form is occasional rather than every spawn.
+   ========================================================================== */
+
+.glint-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.glint {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background-color: rgba(var(--glint-rgb), 0.9);
+  filter: blur(1.4px);
+  opacity: 0;
+  animation: mbb-glint 1100ms ease-out 1 both;
+}
+
+.glint--star {
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 0;
+  background-color: transparent;
+  filter: none;
+}
+
+.glint--star svg { width: 100%; height: 100%; fill: var(--accent); }
+
+@keyframes mbb-glint {
+  0%   { opacity: 0;    transform: translateY(0)     scale(0.55); }
+  30%  { opacity: 0.62; transform: translateY(-1.5px) scale(1); }
+  100% { opacity: 0;    transform: translateY(-4px)  scale(0.8); }
+}
+
+/* ==========================================================================
+   RESPONSIVE — Corporate/Brands
+   Mobile is a priority, not an afterthought: the card grids collapse to a
+   tighter single column rather than one full-width card per row.
+   ========================================================================== */
+
+@media (max-width: 899px) {
+  .steps { grid-template-columns: repeat(2, 1fr); }
+
+  .founders { grid-template-columns: 1fr; }
+
+  /* The portrait art has its blank area across the top and the photograph
+     below, so the hero stays one full-height stack with the copy sitting over
+     that blank top rather than the photo becoming a separate block. */
+  .page-hero {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .page-hero__panel {
+    grid-column: 1;
+    grid-row: 1;
+    align-items: flex-start;
+    padding-top: clamp(6rem, 16vh, 8rem);
+  }
+
+  /* Fades downward here rather than sideways, matching where the portrait
+     art keeps its blank space. */
+  .page-hero__panel::before {
+    /* Clears by 52%, which is where the blank area in both portrait plates
+       ends. Running the fade to 100% left the photograph washed out. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 32%, transparent 52%);
+    mask-image: linear-gradient(to bottom, #000 32%, transparent 52%);
+  }
+
+  .page-hero__photo { grid-column: 1; grid-row: 1; }
+
+  .page-hero__photo-layer { background-image: var(--hero-photo-portrait); }
+
+  .page-hero__closing { grid-row: 2; }
+}
+
+@media (max-width: 620px) {
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Tighter than a stack of full-height cards: the number sits inline with the
+     step title so four steps cost four short rows, not four screens. */
+  .step {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1rem;
+    align-items: baseline;
+  }
+
+  .step::before {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+    grid-row: 1;
+  }
+
+  .step__title { grid-column: 2; }
+  .step__body  { grid-column: 2; margin-top: 0.4rem; }
+
+  .reasons { gap: 0; }
+
+  /* Cards become a single bordered list rather than five separate panels —
+     same content, a fraction of the scroll length. */
+  .reason {
+    border-bottom: 0;
+    padding: 1.1rem 1.2rem;
+  }
+
+  .reason:last-child { border-bottom: 1px solid var(--rule); }
+
+  .site-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* The wordmark stays at every breakpoint: the header is exactly the brand
+     lockup and the switch link everywhere, with no hamburger and nothing
+     hidden. Both therefore have to fit on one row at 320px, so the tracking
+     and type sizes come down rather than either element dropping out. */
+  .site-header {
+    gap: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .site-header__star { height: 20px; }
+
+  .site-header__wordmark {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-indent: 0.12em;
+  }
+
+  .site-header__switch {
+    padding: 0.4rem 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* The chip needs a little breathing room again once it has a background. */
+  .site-header__switch:hover,
+  .site-header__switch:focus-visible { padding: 0.4rem 0.5rem; }
+
+  .site-header__arrow { width: 1.4em; margin-left: 0.5em; }
+}
+
+/* ==========================================================================
+   REDUCED MOTION — every signature moment keeps a static, legible fallback
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Hero: no settle, no mask reveal, no parallax, no gold pass. */
+  .page-hero__photo-layer {
+    transform: none !important;
+    transition: none;
+  }
+
+  .page-hero__headline .line > span {
+    transform: none;
+    transition: none;
+  }
+
+  .page-hero__support {
+    opacity: 1;
+    transition: none;
+  }
+
+  .site-header__star::after { animation: none; }
+
+  /* Gallery: the desktop media query already excludes reduced-motion users,
+     so the stacked sequence applies. This just removes any residual easing. */
+  .gallery__state { transition: none; }
+
+  .site-header { transition: none; }
+
+  /* The glint layer is never created at all — see script.js. */
+}

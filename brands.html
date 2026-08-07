@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>For Luxury Brands &middot; Meaning Beyond Brands</title>
+  <meta name="description" content="The right introduction can change everything. We create meaningful connections between premium brands and the clients they most want to reach." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Same extended Cormorant list index.html uses (adds 500 + matching
+       italics). One stylesheet serves all three pages, so all three need the
+       same weights available. -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-brands">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===== Persistent header ============================================
+       Exactly two elements at every breakpoint. No hamburger, no menu. -->
+  <header class="site-header">
+    <a class="site-header__brand" href="index.html">
+      <!-- TODO: swap placeholder art once final transparent-background assets land. -->
+      <span class="site-header__star" aria-hidden="true">
+        <img src="Assets/Brand/mbb-star-logo-web.png" alt="" />
+      </span>
+      <span class="site-header__wordmark">Meaning Beyond Brands</span>
+    </a>
+    <!-- The arrow is drawn rather than typed: Jost has no U+2192, and the
+         fallback glyph renders as a bare shaft with no head. -->
+    <a class="site-header__switch" href="corporate.html">For Companies<svg class="site-header__arrow" viewBox="0 0 26 8" aria-hidden="true" focusable="false"><path d="M0 4h24M20.5 1L24 4l-3.5 3" fill="none" stroke="currentColor" stroke-width="1" /></svg></a>
+  </header>
+
+  <main id="main">
+
+    <!-- ===== 01 Hero ===================================================
+         Split panel: the approved photograph is the background of the whole
+         hero, with a solid text panel layered over the blank area composed into
+         the left of the plate. Every word is real HTML text; nothing is baked
+         into the image. Desktop uses the landscape plate, mobile the portrait
+         one. Both paths live in style.css as --hero-photo / --hero-photo-portrait. -->
+    <section class="page-hero" aria-labelledby="hero-title">
+      <div class="page-hero__panel">
+        <div class="page-hero__panel-inner">
+          <h1 class="page-hero__headline" id="hero-title">
+            <span class="line"><span>The right</span></span>
+            <span class="line"><span>introduction can</span></span>
+            <span class="line"><span>change everything.</span></span>
+          </h1>
+
+          <span class="page-hero__rule" aria-hidden="true"></span>
+
+          <p class="page-hero__support">
+            We create meaningful connections between premium brands and the
+            clients they most want to reach.
+          </p>
+        </div>
+      </div>
+
+      <!-- The photograph is painted from CSS so its path lives in exactly one
+           place: --hero-photo in style.css. role/aria-label carry what alt
+           text used to. -->
+      <div class="page-hero__photo" role="img"
+           aria-label="A ribboned Meaning Beyond Brands gift box and leather journal on marble.">
+        <span class="page-hero__photo-layer"></span>
+      </div>
+
+      <p class="page-hero__closing">Building meaningful connections that create lasting impact.</p>
+    </section>
+
+    <!-- ===== 02 The Shift ============================================== -->
+    <section class="section section--alt" aria-labelledby="shift-title">
+      <div class="section__inner">
+        <span class="section__eyebrow">02 &middot; The Shift</span>
+        <h2 class="section__title" id="shift-title">
+          The boutique doesn&rsquo;t compete with other boutiques anymore.
+          It competes with the couch.
+        </h2>
+        <p class="section__lede">
+          Convenience has won the transaction. It has not won desire.
+        </p>
+        <p class="section__lede">
+          Bain&rsquo;s recent luxury research supports the broader argument:
+          personal luxury goods weakened in 2024 while consumers increasingly
+          prioritised experiences over products. Bain separately estimated the
+          personal luxury goods market would erode by around 2% that year.
+        </p>
+        <p class="section__lede">
+          The opportunity isn&rsquo;t simply to reach more people. It&rsquo;s to
+          give the right people a reason to enter your world: to feel welcomed,
+          understood and connected to the brand beyond the purchase.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== 03 How It Works =========================================== -->
+    <section class="section" aria-labelledby="how-title">
+      <div class="section__inner">
+        <span class="section__eyebrow">03 &middot; How It Works</span>
+        <h2 class="section__title" id="how-title">A brand partnership, end to end.</h2>
+
+        <ol class="steps">
+          <li class="step">
+            <h3 class="step__title">We map the moment</h3>
+            <p class="step__body">Together, we identify the key moments or timings throughout the year.</p>
+          </li>
+          <li class="step">
+            <h3 class="step__title">We design the experience</h3>
+            <p class="step__body">A curated activation built around your brand&rsquo;s world: private, hosted, and true to your identity and brand guidelines.</p>
+          </li>
+          <li class="step">
+            <h3 class="step__title">We deliver, end to end</h3>
+            <p class="step__body">Full coordination of guest experience and logistics. You approve, we execute.</p>
+          </li>
+          <li class="step">
+            <h3 class="step__title">The moment becomes the memory</h3>
+            <p class="step__body">An experience your audience associates with your brand long after it ends.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== 04 Experiences: the sticky gallery (WOW 2) =================
+         Same three images Corporate uses, described from the brand's side.
+         Names, order and captions are final.
+         Images are the real extracted files in Assets/Experiences/. -->
+    <section class="section" aria-labelledby="exp-title">
+      <div class="section__inner">
+        <span class="section__eyebrow">04 &middot; Experiences</span>
+        <h2 class="section__title" id="exp-title">The same room, from your side of it.</h2>
+      </div>
+
+      <div class="gallery__scroll">
+        <div class="gallery__sticky">
+          <div class="section__inner">
+            <div class="gallery__states">
+
+              <article class="gallery__state is-active" data-index="0">
+                <figure class="gallery__figure">
+                  <img src="Assets/Experiences/gifting-suite.jpg" alt="A gift box of curated confections, opened and presented at the table." loading="lazy" />
+                </figure>
+                <div class="gallery__text">
+                  <span class="gallery__index">Experience 01</span>
+                  <h3 class="gallery__name">Curated Gifting Suite</h3>
+                  <p class="gallery__caption">
+                    A tactile introduction to your brand, placing product and
+                    story directly into the hands of a carefully selected
+                    audience.
+                  </p>
+                </div>
+              </article>
+
+              <article class="gallery__state" data-index="1">
+                <figure class="gallery__figure">
+                  <img src="Assets/Experiences/private-breakfast.jpg" alt="A private hosted breakfast table set for guests." loading="lazy" />
+                </figure>
+                <div class="gallery__text">
+                  <span class="gallery__index">Experience 02</span>
+                  <h3 class="gallery__name">Private Breakfast</h3>
+                  <p class="gallery__caption">
+                    A private setting for genuine conversation with potential
+                    clients, away from the noise of a conventional campaign.
+                  </p>
+                </div>
+              </article>
+
+              <article class="gallery__state" data-index="2">
+                <figure class="gallery__figure">
+                  <img src="Assets/Experiences/heritage-walkthrough.jpg" alt="A jewellery boutique showroom, guests guided through the display cases." loading="lazy" />
+                </figure>
+                <div class="gallery__text">
+                  <span class="gallery__index">Experience 03</span>
+                  <h3 class="gallery__name">Heritage Walkthrough</h3>
+                  <p class="gallery__caption">
+                    Bring guests inside the world behind the brand, turning
+                    heritage and craftsmanship into a personal connection.
+                  </p>
+                </div>
+              </article>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery__cues" aria-hidden="true">
+          <div class="gallery__cue" data-index="0"></div>
+          <div class="gallery__cue" data-index="1"></div>
+          <div class="gallery__cue" data-index="2"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 05 Why MBB ================================================
+         Five cards, final and locked. "Backed by the Data" is dropped from the
+         reference draft's six: it is not a customer benefit, the Bain point
+         already lives in 02 The Shift, and a citation-dependent card would
+         date quickly. "Deep Market Access" stands as its own card. -->
+    <section class="section section--alt" aria-labelledby="why-title">
+      <div class="section__inner">
+        <span class="section__eyebrow">05 &middot; Why MBB</span>
+        <h2 class="section__title" id="why-title">Why brands work with us.</h2>
+
+        <div class="reasons">
+          <article class="reason">
+            <h3 class="reason__title">New Customer Segments</h3>
+            <p class="reason__body">We open your brand to audiences it hasn&rsquo;t reached yet, introduced through experience, increasing revenue for the brand.</p>
+          </article>
+          <article class="reason">
+            <h3 class="reason__title">Loyalty Through Experience</h3>
+            <p class="reason__body">Retention isn&rsquo;t won with repetition. It&rsquo;s won with moments people don&rsquo;t want to miss.</p>
+          </article>
+          <article class="reason">
+            <h3 class="reason__title">Deep Market Access</h3>
+            <p class="reason__body">Direct relationships across UAE corporate and financial entities and high-net-worth networks.</p>
+          </article>
+          <article class="reason">
+            <h3 class="reason__title">Full Activation Management</h3>
+            <p class="reason__body">Venue, guest experience, and logistics, managed end to end.</p>
+          </article>
+          <article class="reason">
+            <h3 class="reason__title">Local Expertise</h3>
+            <p class="reason__body">30+ years of combined experience across the UAE corporate and luxury landscape.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 06 About MBB ==============================================
+         BYTE-FOR-BYTE IDENTICAL TO THE SAME BLOCK IN corporate.html.
+         Company copy, founder bios and headshots are all final. -->
+    <section class="section" aria-labelledby="about-title">
+      <div class="section__inner">
+        <span class="section__eyebrow">06 &middot; About</span>
+        <h2 class="section__title" id="about-title">Meaning Beyond Brands</h2>
+        <p class="section__lede">
+          Meaning Beyond Brands operates between the corporate and luxury worlds,
+          built around a simple belief: the strongest relationships are created
+          through moments that feel personal, considered and difficult to
+          replicate.
+        </p>
+        <p class="section__lede">
+          We bring companies, premium brands and carefully selected audiences
+          together through experiences designed to create recognition, connection
+          and long-term value, managing the relationship from introduction
+          through to delivery.
+        </p>
+
+        <div class="founders">
+          <div class="founder">
+            <span class="founder__portrait">
+              <img src="Assets/About/founder-swarnaleka-shetty-vyas.jpg" alt="" loading="lazy" />
+            </span>
+            <div>
+              <h3 class="founder__name">Swarnaleka Shetty Vyas</h3>
+              <p class="founder__role">Co-Founder &amp; CCO</p>
+              <p class="founder__bio">25+ years of executive leadership across sales, distribution and commercial strategy in India and the Middle East, including senior roles at Zurich International Life, HSBC and Aviva. Recognized among the Middle East&rsquo;s Most Inspirational Women in Leadership, 2022 to 2025.</p>
+            </div>
+          </div>
+          <div class="founder">
+            <span class="founder__portrait">
+              <img src="Assets/About/founder-ana-manjavacas-abad.jpg" alt="" loading="lazy" />
+            </span>
+            <div>
+              <h3 class="founder__name">Ana Manjavacas Abad</h3>
+              <p class="founder__role">Co-Founder &amp; CEO</p>
+              <p class="founder__bio">5+ years in the UAE as the main point of contact in Dubai for high-net-worth individuals relocating from Europe. A professional interpreter fluent in three languages, LVMH certified, and a branding and marketing expert.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 07 Closing ================================================ -->
+    <section class="section section--alt closing" aria-labelledby="closing-title">
+      <div class="section__inner">
+        <span class="section__eyebrow">07 &middot; Closing</span>
+        <h2 class="section__title" id="closing-title">Let&rsquo;s design your brand&rsquo;s next unforgettable moment.</h2>
+        <a class="closing__contact" href="mailto:hello@meaningbeyondbrands.com">hello@meaningbeyondbrands.com</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== Footer ======================================================
+       No legal links until Privacy/Terms pages actually exist. -->
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p>Meaning Beyond Brands FZ-LLC &middot; Ras Al Khaimah, UAE</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
