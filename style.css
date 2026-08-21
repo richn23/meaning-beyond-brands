@@ -1418,21 +1418,56 @@ a { color: inherit; }
     grid-column: 1;
     grid-row: 1;
     align-items: flex-start;
-    padding-top: clamp(6rem, 16vh, 8rem);
+    padding-top: clamp(5rem, 12vh, 6.5rem);
   }
 
-  /* Fades downward here rather than sideways, matching where the portrait
-     art keeps its blank space. */
-  .page-hero__panel::before {
-    /* Clears by 52%, which is where the blank area in both portrait plates
-       ends. Running the fade to 100% left the photograph washed out. */
-    -webkit-mask-image: linear-gradient(to bottom, #000 32%, transparent 52%);
-    mask-image: linear-gradient(to bottom, #000 32%, transparent 52%);
+  /* The panel-wide fade is replaced below by one that hugs the copy. Tuning it
+     as a percentage of the panel could never work for both themes: the copy
+     ends at ~48% of the panel, but the blank area built into the Brands plate
+     ends at 38% and Corporate's at 52%, so any single value either left the
+     Brands support line sitting on the photograph or washed out Corporate's. */
+  .page-hero__panel::before { display: none; }
+
+  /* The padding and the fade are the same length on purpose: the solid part of
+     the scrim then ends exactly where the copy ends, and the fade lives
+     entirely in the padding below it. Set one, get both. */
+  .page-hero__panel-inner {
+    --hero-scrim-fade: 76px;
+    padding-bottom: var(--hero-scrim-fade);
+  }
+
+  /* Scrim sized to the copy itself, so it adapts to however many lines the
+     headline and support run to, and to whichever plate is behind it. Bleeds
+     out to the viewport edges and up behind the fixed header, then fades over
+     the last 70px so the photograph is clean below the text. */
+  .page-hero__panel-inner::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    /* These two must mirror .page-hero__panel's own left and right padding,
+       which are not the same value, or the scrim stops short of one edge. */
+    left: calc(-1 * clamp(1.25rem, 4vw, 3.5rem));
+    right: calc(-1 * clamp(1.75rem, 3.5vw, 3rem));
+    top: calc(-1 * clamp(5rem, 12vh, 6.5rem));
+    bottom: 0;
+    background-color: var(--hero-panel);
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--hero-scrim-fade)), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--hero-scrim-fade)), transparent 100%);
   }
 
   .page-hero__photo { grid-column: 1; grid-row: 1; }
 
   .page-hero__photo-layer { background-image: var(--hero-photo-portrait); }
+}
+
+/* A landscape phone is narrow enough to take the stacked hero above, but the
+   portrait plate crops to a thin horizontal band in a short wide box and stops
+   reading as a photograph. The landscape plate suits that shape. */
+@media (max-width: 899px) and (orientation: landscape) {
+  .page-hero__photo-layer { background-image: var(--hero-photo); }
+}
+
+@media (max-width: 899px) {
 
   .page-hero__closing { grid-row: 2; }
 }
