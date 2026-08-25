@@ -86,9 +86,9 @@ Order goes tangible, then hosted, then immersive. Corporate captions are written
 - **Built for Retention:** Retention isn't won with another bonus. It's won with moments your people remember and want to earn again.
 - **Local Expertise:** 30+ years of combined experience across the UAE corporate and luxury landscape.
 
-## 06 About MBB (one neutral version, used on both pages): final, locked 2026-08-07
+## 06 About MBB (one neutral version, used on both pages): final, locked 2026-08-07, female-led line added 2026-08-25
 
-> Meaning Beyond Brands operates between the corporate and luxury worlds, built around a simple belief: the strongest relationships are created through moments that feel personal, considered and difficult to replicate.
+> Meaning Beyond Brands is a female-led company operating between the corporate and luxury worlds, built around a simple belief: the strongest relationships are created through moments that feel personal, considered and difficult to replicate.
 >
 > We bring companies, premium brands and carefully selected audiences together through experiences designed to create recognition, connection and long-term value, managing the relationship from introduction through to delivery.
 
@@ -99,7 +99,9 @@ Used unchanged on both pages.
 - **Swarnaleka Shetty Vyas, Co-Founder & CCO:** 25+ years of executive leadership across sales, distribution and commercial strategy in India and the Middle East, including senior roles at Zurich International Life, HSBC and Aviva. Recognized among the Middle East's Most Inspirational Women in Leadership, 2022 to 2025.
 - **Ana Manjavacas Abad, Co-Founder & CEO:** 5+ years in the UAE as the main point of contact in Dubai for high-net-worth individuals relocating from Europe. A professional interpreter fluent in three languages, LVMH certified, and a branding and marketing expert.
 
-**Headshots: real files, live on both pages.** At `Assets\About\founder-swarnaleka-shetty-vyas.jpg` and `Assets\About\founder-ana-manjavacas-abad.jpg`, extracted from the Brands reference draft (the only draft with headshots). Decided and built: same pair used on both `corporate.html` and `brands.html`, since About is shared and neutral.
+**Founder block temporarily hidden 2026-08-25** (headshots, names, titles and bios). The markup is commented out in place on both pages, so restoring it is a single uncomment. The company paragraphs above remain live.
+
+**Headshots: real files, on disk and ready to restore.** At `Assets\About\founder-swarnaleka-shetty-vyas.jpg` and `Assets\About\founder-ana-manjavacas-abad.jpg`, extracted from the Brands reference draft (the only draft with headshots). Decided and built: same pair used on both `corporate.html` and `brands.html`, since About is shared and neutral.
 
 ## 07 Closing: reuse
 - Corporate CTA: "Let's design your next reward moment."
