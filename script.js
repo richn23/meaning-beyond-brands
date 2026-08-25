@@ -43,18 +43,23 @@
     var header = document.querySelector(".site-header");
     if (!header) return;
 
-    var ticking = false;
-
+    // Deliberately not throttled through requestAnimationFrame. The previous
+    // version set a `ticking` flag before scheduling a frame and cleared it
+    // inside that frame, so if the frame never arrived, which happens in a
+    // background tab, during prerender, or whenever rAF is throttled, the flag
+    // stayed true and every later scroll event returned early. The header then
+    // kept its transparent background permanently and copy scrolled straight
+    // through it. Toggling a class on a boolean is cheap enough that the
+    // throttle was buying nothing and costing correctness.
     function update() {
-      header.classList.toggle("is-stuck", window.scrollY > 40);
-      ticking = false;
+      // 8px rather than 40: the background has to be there before content has
+      // scrolled far enough to reach the bar, or copy is briefly legible
+      // through it. Small enough to feel immediate, large enough that scroll
+      // jitter at the very top does not flicker the background on and off.
+      header.classList.toggle("is-stuck", window.scrollY > 8);
     }
 
-    window.addEventListener("scroll", function () {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(update);
-    }, { passive: true });
+    window.addEventListener("scroll", update, { passive: true });
 
     update();
   })();
