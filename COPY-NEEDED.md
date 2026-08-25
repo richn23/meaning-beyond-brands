@@ -112,6 +112,13 @@ Used unchanged on both pages.
 
 "Meaning Beyond Brands FZ-LLC · Ras Al Khaimah, UAE" (middle dot separator, not em dash, matches the original brief's footer punctuation style).
 
+**Social links, added 2026-08-25.** Live in the footer on all three pages:
+- LinkedIn: `https://www.linkedin.com/company/meaning-beyond-brands/`
+- Instagram: `https://www.instagram.com/meaningbeyondbrands` (the app's `?igsi=` share token is stripped; it is a per-share tracking value, not part of the profile URL)
+- WhatsApp: `https://wa.me/971585903249`, the click-to-chat form of +971 58 590 3249
+
+All three open in a new tab with `rel="noopener noreferrer"`.
+
 **Legal links, decided 2026-08-07: omit entirely for now, don't use placeholder `#` links.** If Privacy/Terms pages don't exist yet, leave them out of the footer rather than linking somewhere dead. A missing link reads as unfinished-but-honest; a `#` link reads as broken. Add the real links once those pages exist.
 
 ---

@@ -292,10 +292,19 @@
   </main>
 
   <!-- ===== Footer ======================================================
-       No legal links until Privacy/Terms pages actually exist. -->
+       No legal links until Privacy/Terms pages actually exist.
+       Social links open in a new tab so the visitor keeps the site; rel
+       guards against reverse-tabnabbing. The Instagram URL is the canonical
+       profile, with the app's ?igsi= share token stripped, and WhatsApp uses
+       the wa.me click-to-chat form of +971 58 590 3249. -->
   <footer class="site-footer">
     <div class="site-footer__inner">
       <p>Meaning Beyond Brands FZ-LLC &middot; Ras Al Khaimah, UAE</p>
+      <p class="site-footer__links">
+        <a href="https://www.linkedin.com/company/meaning-beyond-brands/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://www.instagram.com/meaningbeyondbrands" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://wa.me/971585903249" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </p>
     </div>
   </footer>
 
