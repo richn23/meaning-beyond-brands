@@ -94,12 +94,12 @@ Order goes tangible, then hosted, then immersive. Corporate captions are written
 
 Used unchanged on both pages.
 
-**Founder bios: final, tightened 2026-08-07 from the Brands reference draft.** Same neutral company story as the About paragraph above, so this text is usable on both pages regardless of which draft it came from.
+**Founder bios: final. Roles updated 2026-09-07: Ana is Founder and CEO, Swarnaleka is Investor. Bios themselves are unchanged, and Ana is listed first on the pages now that founder precedes investor.** Same neutral company story as the About paragraph above, so this text is usable on both pages regardless of which draft it came from.
 
-- **Swarnaleka Shetty Vyas, Co-Founder & CCO:** 25+ years of executive leadership across sales, distribution and commercial strategy in India and the Middle East, including senior roles at Zurich International Life, HSBC and Aviva. Recognized among the Middle East's Most Inspirational Women in Leadership, 2022 to 2025.
-- **Ana Manjavacas Abad, Co-Founder & CEO:** 5+ years in the UAE as the main point of contact in Dubai for high-net-worth individuals relocating from Europe. A professional interpreter fluent in three languages, LVMH certified, and a branding and marketing expert.
+- **Swarnaleka Shetty Vyas, Investor:** 25+ years of executive leadership across sales, distribution and commercial strategy in India and the Middle East, including senior roles at Zurich International Life, HSBC and Aviva. Recognized among the Middle East's Most Inspirational Women in Leadership, 2022 to 2025.
+- **Ana Manjavacas Abad, Founder & CEO:** 5+ years in the UAE as the main point of contact in Dubai for high-net-worth individuals relocating from Europe. A professional interpreter fluent in three languages, LVMH certified, and a branding and marketing expert.
 
-**Founder block temporarily hidden 2026-08-25** (headshots, names, titles and bios). The markup is commented out in place on both pages, so restoring it is a single uncomment. The company paragraphs above remain live.
+**Founder block restored 2026-09-07** with the updated roles. Live on both pages.
 
 **Headshots: real files, on disk and ready to restore.** At `Assets\About\founder-swarnaleka-shetty-vyas.jpg` and `Assets\About\founder-ana-manjavacas-abad.jpg`, extracted from the Brands reference draft (the only draft with headshots). Decided and built: same pair used on both `corporate.html` and `brands.html`, since About is shared and neutral.
 
